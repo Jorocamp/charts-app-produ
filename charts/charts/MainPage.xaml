@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:charts"
+             x:Class="charts.MainPage"
+             xmlns:forms="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms">
+
+    <ScrollView>
+        <StackLayout Orientation="Vertical">
+
+
+            <Label FontSize="15" Text=" &#10; &#10; Porcentaje general de tareas"/>
+            <forms:ChartView x:Name="Chart1"  
+                             HeightRequest="200"/>
+            <Grid x:Name="gridPG"></Grid>
+            <Label FontSize="15" Text=" &#10; &#10; Porcentaje para tareas productivas" />
+            <forms:ChartView x:Name="Chart2"  
+                             HeightRequest="200"/>
+            <Grid x:Name="gridTP"></Grid>
+            <Label FontSize="15" Text=" &#10;  &#10; Porcentaje para tareas colaborativas" />
+            <forms:ChartView x:Name="Chart3"  
+                             HeightRequest="200"/>
+            <Grid x:Name="gridTC"></Grid>
+            <Label FontSize="15" Text=" &#10; &#10; Porcentaje para tareas improductivas" />
+            <forms:ChartView x:Name="Chart4"  
+                             HeightRequest="200"/>
+            <Grid x:Name="gridTI"></Grid>
+            <Label FontSize="15" Text=" &#10; &#10; Porcentaje para productividad por día" />
+            <forms:ChartView x:Name="Chart5"  
+                             HeightRequest="200"/>
+            <Grid x:Name="gridD"></Grid>
+        </StackLayout>
+    </ScrollView>
+
+
+</ContentPage>

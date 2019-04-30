@@ -1,0 +1,12 @@
+C:\Users\MICHA\source\repos\charts\charts\charts\bin\Debug\netstandard2.0\charts.deps.json
+C:\Users\MICHA\source\repos\charts\charts\charts\bin\Debug\netstandard2.0\charts.dll
+C:\Users\MICHA\source\repos\charts\charts\charts\obj\Debug\netstandard2.0\charts.csprojAssemblyReference.cache
+C:\Users\MICHA\source\repos\charts\charts\charts\obj\Debug\netstandard2.0\App.xaml.g.cs
+C:\Users\MICHA\source\repos\charts\charts\charts\obj\Debug\netstandard2.0\MainPage.xaml.g.cs
+C:\Users\MICHA\source\repos\charts\charts\charts\obj\Debug\netstandard2.0\charts.csproj.CoreCompileInputs.cache
+C:\Users\MICHA\source\repos\charts\charts\charts\obj\Debug\netstandard2.0\charts.AssemblyInfoInputs.cache
+C:\Users\MICHA\source\repos\charts\charts\charts\obj\Debug\netstandard2.0\charts.AssemblyInfo.cs
+C:\Users\MICHA\source\repos\charts\charts\charts\bin\Debug\netstandard2.0\charts.pdb
+C:\Users\MICHA\source\repos\charts\charts\charts\obj\Debug\netstandard2.0\charts.dll
+C:\Users\MICHA\source\repos\charts\charts\charts\obj\Debug\netstandard2.0\charts.pdb
+C:\Users\MICHA\source\repos\charts\charts\charts\obj\Debug\netstandard2.0\XamlC.stamp
