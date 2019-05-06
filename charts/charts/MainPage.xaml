@@ -9,6 +9,7 @@
         <StackLayout Orientation="Vertical">
 
 
+            <Label x:Name="titulo" FontSize="17" HorizontalOptions="Center"  VerticalOptions="Center" />
             <Label FontSize="15" Text=" &#10; &#10; Porcentaje general de tareas"/>
             <forms:ChartView x:Name="Chart1"  
                              HeightRequest="200"/>
@@ -29,6 +30,12 @@
             <forms:ChartView x:Name="Chart5"  
                              HeightRequest="200"/>
             <Grid x:Name="gridD"></Grid>
+
+            <Button Text="Enviar datos por e-mail"
+                VerticalOptions="CenterAndExpand"
+                HorizontalOptions="Center"
+                Clicked="OnButtonClicked" />
+
         </StackLayout>
     </ScrollView>
 

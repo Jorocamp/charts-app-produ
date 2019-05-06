@@ -1,4 +1,5 @@
 charts
+DocumentFormat.OpenXml
 FormsViewGroup
 Microcharts
 Microcharts.Droid
@@ -11,6 +12,7 @@ SkiaSharp
 SkiaSharp.Views.Android
 SkiaSharp.Views.Forms
 System.Buffers
+System.IO.Packaging
 System.Memory
 System.Runtime.CompilerServices.Unsafe
 System.Runtime
@@ -23,6 +25,7 @@ Xamarin.Android.Support.Annotations
 Xamarin.Android.Support.Compat
 Xamarin.Android.Support.Core.UI
 Xamarin.Android.Support.Core.Utils
+Xamarin.Android.Support.CustomTabs
 Xamarin.Android.Support.Design
 Xamarin.Android.Support.Fragment
 Xamarin.Android.Support.Media.Compat
@@ -34,9 +37,24 @@ Xamarin.Android.Support.v7.MediaRouter
 Xamarin.Android.Support.v7.Palette
 Xamarin.Android.Support.v7.RecyclerView
 Xamarin.Android.Support.Vector.Drawable
+Xamarin.Essentials
 Xamarin.Forms.Core
 Xamarin.Forms.Platform.Android
 Xamarin.Forms.Platform
 Xamarin.Forms.Xaml
 netstandard
+System.Resources.ResourceManager
+System.Diagnostics.Debug
+System.Diagnostics.Tools
 System.Collections
+System.Xml.ReaderWriter
+System.Xml.XDocument
+System.Text.Encoding
+System.Globalization
+System.ObjectModel
+System.IO.FileSystem.Primitives
+System.Runtime.Serialization.Xml
+System.Threading
+System.Reflection.Extensions
+System.Text.Encoding.Extensions
+System.IO.FileSystem

@@ -1,25 +1,30 @@
 ﻿using Microcharts;
 using SkiaSharp;
-using Microcharts.Forms;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Entry = Microcharts.Entry;
 using Npgsql;
 using Plugin.DeviceOrientation;
 using Plugin.DeviceOrientation.Abstractions;
+using System.IO;
+using Xamarin.Essentials;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Spreadsheet;
+using Cell = DocumentFormat.OpenXml.Spreadsheet.Cell;
+using DocumentFormat.OpenXml;
+using System.Linq;
+
 namespace charts
 {
     public partial class MainPage : ContentPage
     {
 
         string ConnectionString = "Server=ec2-107-20-185-27.compute-1.amazonaws.com; Port=5432; User Id=wdxcskrixgrlrg; Password=cf1d8afae86ffe18a9216dac407650b8d67a79d8e9d040e5404c4fa3ff8670d8; Database=d5bugk5ss3gtcc; SSL Mode=Require; Trust Server Certificate=true";
-        string[,] colors = { { "#4edb5c", "#18c929", "#03a012", "#18ce79", "#2b6331", "#21c432", "#b3e0b8", "#698c6d", "#414f43", "#7f7f7f" },
-        { "#4e60db", "#001291", "#000947", "#8796ff", "#4d558e", "#292d47", "#bfc7fc", "#666a84", "#8f3fb5", "#7f7f7f" },
-        { "#db645c", "#8c413c", "#421e1c", "#ffb5b5", "#ff0d00", "#b70900", "#f74238", "#c1837f", "#ff7338", "#7f7f7f" }};
+        string[,] colors = { { "#827d05", "#d3ce58", "#d8d6a6", "#0b8276", "#59c6bb", "#85b5b0", "#320d7c", "#6840b7", "#8b79af", "#303030" },
+        { "#aa7211", "#e5b35e", "#968261", "#b20cac", "#c94ec5", "#cc9bca", "#119bdb", "#5890aa", "#8eb8cc", "#303030" },
+        { "#0a9b0a", "#2e5e2e", "#a1c9a1", "#081191", "#434ccc", "#8d90c4", "#d80d0d", "#562b2b", "#e09191", "#303030" }};
         List<int> totalPaths = new List<int>();
         List<string> bestDays = new List<string>();
         List<string> worstDays = new List<string>();
@@ -34,7 +39,23 @@ namespace charts
         int totalTI;
         int totalTC;
 
-        
+        List<string> generalData = new List<string>();
+        List<string> tpDataA = new List<string>();
+        List<string> tcDataA = new List<string>();
+        List<string> tiDataA = new List<string>();
+        List<string> daysData = new List<string>();
+
+
+
+
+        string nombreMuestreo;
+        string tipoActividad;
+        string nombreProyecto;
+        string desMuestreo;
+        string idMuestreo;
+
+
+
         async void getNumberTasks(string sampling, string activity)
         {
             try
@@ -193,6 +214,8 @@ namespace charts
             string vlTC = Math.Round(((double)totalTC * 100.0 / (double)total), 2).ToString() + "%";
             string vlTI = Math.Round(((double)totalTI * 100.0 / (double)total), 2).ToString() + "%";
             string[] param = { "Tareas productivas (TP)", totalTP.ToString(), vlTP, "Tareas contributivas (TC)", totalTC.ToString(), vlTC, "Tareas improductivas (TP)", totalTI.ToString(), vlTI, "Total", total.ToString(), "100%" };
+            generalData = param.OfType<string>().ToList();
+           
             createGeneralTableHeader();
             createGeneralTable(param);
             return new List<Entry> {
@@ -357,7 +380,9 @@ namespace charts
             if (task.Equals("1"))
             {
 
-
+                tpDataA.Add(tarea);
+                tpDataA.Add(total);
+                tpDataA.Add(porcentaje);
                 gridTP.Children.Add(h1, 0, row);
                 gridTP.Children.Add(h2, 1, row);
                 gridTP.Children.Add(h3, 2, row);
@@ -366,7 +391,9 @@ namespace charts
             }
             if (task.Equals("2"))
             {
-
+                tcDataA.Add(tarea);
+                tcDataA.Add(total);
+                tcDataA.Add(porcentaje);
                 gridTC.Children.Add(h1, 0, row);
                 gridTC.Children.Add(h2, 1, row);
                 gridTC.Children.Add(h3, 2, row);
@@ -375,6 +402,9 @@ namespace charts
             if (task.Equals("3"))
             {
 
+                tiDataA.Add(tarea);
+                tiDataA.Add(total);
+                tiDataA.Add(porcentaje);
                 gridTI.Children.Add(h1, 0, row);
                 gridTI.Children.Add(h2, 1, row);
                 gridTI.Children.Add(h3, 2, row);
@@ -388,6 +418,7 @@ namespace charts
         void addDateTable(string[] data, int row) {
            for(int i = 0; i < 6; i++)
             {
+                daysData.Add(data[i]);
                 var temp = new Label
                 {
                     Text = data[i],
@@ -421,6 +452,8 @@ namespace charts
 
         async void fillBest(string sampling)
         {
+
+            try { 
             NpgsqlConnection connection = new NpgsqlConnection(ConnectionString);
             connection.Open();
 
@@ -437,11 +470,17 @@ namespace charts
             }
 
             connection.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
 
         }
 
         async void fillWorst(string sampling)
         {
+            try { 
             NpgsqlConnection connection = new NpgsqlConnection(ConnectionString);
             connection.Open();
 
@@ -458,11 +497,17 @@ namespace charts
             }
 
             connection.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
 
         }
 
         async void fillPathsxDays(string sampling)
         {
+            try { 
             NpgsqlConnection connection = new NpgsqlConnection(ConnectionString);
             connection.Open();
 
@@ -498,8 +543,41 @@ namespace charts
 
             }
             connection.Close();
+        }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+
+}
+        async void getNames(string sampling)
+        {
+            try
+            {
+                NpgsqlConnection connection = new NpgsqlConnection(ConnectionString);
+                connection.Open();
+
+
+                NpgsqlCommand command = connection.CreateCommand();
+                command.CommandText = "select * from (select n.id,n.samp,n.tamp,p.nombre, n.descripcion from ( select s.id, s.nombre as samp, t.nombre as tamp, s.project_id, s.descripcion from samplings s inner join sampling_types t on t.id = s.sampling_type_id) n inner join projects p on p.id=n.project_id) f where id = "+sampling+";";
+
+                NpgsqlDataReader reader = command.ExecuteReader();
+                reader.Read();
+
+                nombreMuestreo = reader[1].ToString();
+                tipoActividad = reader[2].ToString();
+                nombreProyecto = reader[3].ToString();
+                desMuestreo = reader[4].ToString();
+
+                connection.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
 
         }
+
 
 
         void IniData(string sampling) {
@@ -511,27 +589,252 @@ namespace charts
             getDataCharts(sampling, "3");
             getPathsxDay(sampling);
             fillPathsxDays(sampling);
+            getNames(sampling);
+            idMuestreo = sampling;
+
+            titulo.Text = nombreMuestreo + " (" + tipoActividad + ")";
 
 
         }
 
 
 
+        public async Task SendEmail(string subject, string body)
+        {
+            try
+            {
+                
+                var message = new EmailMessage
+                {
+                        Subject = subject,
+                        Body = body,
+                        //To = recipients,
+                        //Cc = ccRecipients,
+                        //Bcc = bccRecipients
+                };
+
+
+
+                    message.Attachments.Add(new EmailAttachment(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), idMuestreo + "_" + tipoActividad + ".xlsx")));
+
+                await Email.ComposeAsync(message);
+            }
+            catch (FeatureNotSupportedException fbsEx)
+            {
+                // Email is not supported on this device
+                Console.WriteLine(fbsEx);
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex);
+                // Some other exception occurred
+            }
+        }
+
+
+
+        //GenerarFilas para EXCEL
+
+        private string GetExcelColumnName(uint columnNumber)
+        {
+            uint dividend = columnNumber;
+            string columnName = String.Empty;
+            uint modulo;
+
+            while (dividend > 0)
+            {
+                modulo = (dividend - 1) % 26;
+                columnName = Convert.ToChar(65 + modulo).ToString() + columnName;
+                dividend = (uint)((dividend - modulo) / 26);
+            }
+
+            return columnName;
+        }
+
+        private Cell InsertCell(uint rowIndex, uint columnIndex, Worksheet worksheet, string value)
+        {
+            Row row = null;
+            var sheetData = worksheet.GetFirstChild<SheetData>();
+
+            // Check if the worksheet contains a row with the specified row index.
+            row = sheetData.Elements<Row>().FirstOrDefault(r => r.RowIndex == rowIndex);
+            if (row == null)
+            {
+                row = new Row() { RowIndex = rowIndex };
+                sheetData.Append(row);
+            }
+
+            // Convert column index to column name for cell reference.
+            var columnName = GetExcelColumnName(columnIndex);
+            var cellReference = columnName + rowIndex;      // e.g. A1
+
+            // Check if the row contains a cell with the specified column name.
+            var cell = row.Elements<Cell>()
+                       .FirstOrDefault(c => c.CellReference.Value == cellReference);
+            if (cell == null)
+            {
+                if (int.TryParse(value, out int n))
+                {
+                    cell = new Cell() { CellReference = cellReference, CellValue = new CellValue(value), DataType = CellValues.Number };
+                }
+                else if (value[value.Length - 1] == '%') {
+                    value = value.Substring(0, value.Length - 1);
+                    double result;
+                    result = Convert.ToDouble(value);
+                    result = result / 100.00;
+                    value = result.ToString();
+                    cell = new Cell() { CellReference = cellReference, CellValue = new CellValue(value), DataType = CellValues.Number };
+                }
+                else
+                {
+                    cell = new Cell() { CellReference = cellReference, CellValue = new CellValue(value), DataType = CellValues.String };
+                }
+                if (row.ChildElements.Count < columnIndex)
+                    row.AppendChild(cell);
+                else
+                    row.InsertAt(cell, (int)columnIndex);
+            }
+
+            return cell;
+        }
+
+        //Excel Chart
+
+
+
+
+        //Create table
+        private void createTable(Worksheet wrk, uint fr, uint fc, uint totC, List<string> values) {
+
+            uint cont = 0;
+            uint ront = 0;
+            for(int i = 0; i < values.Count; i++)
+            {
+                if(cont >= totC)
+                {
+                    cont = 0;
+                    ront++;
+                }
+                InsertCell(fr+ront, fc+cont, wrk, values[i]);
+                cont++;
+            }
+
+
+        }
+
+
+
+        async void OnButtonClicked(object sender, EventArgs args)
+        {
+            using (SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Create(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), idMuestreo + "_" + tipoActividad + ".xlsx"), SpreadsheetDocumentType.Workbook))
+            {
+                // Add a WorkbookPart to the document.
+                WorkbookPart workbookpart = spreadsheetDocument.AddWorkbookPart();
+                workbookpart.Workbook = new Workbook();
+
+                // Add a WorksheetPart to the WorkbookPart.
+                WorksheetPart worksheetPart = workbookpart.AddNewPart<WorksheetPart>();
+                SheetData sheetData = new SheetData();
+                worksheetPart.Worksheet = new Worksheet(sheetData);
+
+                // Add Sheets to the Workbook.
+                Sheets sheets = spreadsheetDocument.WorkbookPart.Workbook.
+                    AppendChild<Sheets>(new Sheets());
+
+                // Append a new worksheet and associate it with the workbook.
+                Sheet sheet = new Sheet()
+                {
+                    Id = spreadsheetDocument.WorkbookPart.
+                    GetIdOfPart(worksheetPart),
+                    SheetId = 1,
+                    Name = "Consolidacion del muestreo"
+                };
+
+                //Proyect Data
+                InsertCell(1, 1, worksheetPart.Worksheet, "Datos del Muestreo");
+                InsertCell(2, 1, worksheetPart.Worksheet, "Nombre del Proyecto: ");
+                InsertCell(3, 1, worksheetPart.Worksheet, "Nombre del Muestreo: ");
+                InsertCell(4, 1, worksheetPart.Worksheet, "Actividad: ");
+                InsertCell(5, 1, worksheetPart.Worksheet, "ID Muestreo: ");
+                InsertCell(6, 1, worksheetPart.Worksheet, "Descripcion: ");
+
+                InsertCell(2, 2, worksheetPart.Worksheet, nombreProyecto);
+                InsertCell(3, 2, worksheetPart.Worksheet, nombreMuestreo);
+                InsertCell(4, 2, worksheetPart.Worksheet, tipoActividad);
+                InsertCell(5, 2, worksheetPart.Worksheet, idMuestreo);
+                InsertCell(6, 2, worksheetPart.Worksheet, desMuestreo);
+
+                //Name of tables
+                InsertCell(1, 4, worksheetPart.Worksheet, "Porcentaje general de tareas");
+                InsertCell(1, 8, worksheetPart.Worksheet, "Porcentaje para tareas productivas");
+                InsertCell(1, 12, worksheetPart.Worksheet, "Porcentaje para tareas contributivas");
+                InsertCell(1, 16, worksheetPart.Worksheet, "Porcentaje para tareas no productivas");
+                InsertCell(1, 20, worksheetPart.Worksheet, "Productividad por día");
+
+
+                //General table (Header and then data)
+                InsertCell(2, 4, worksheetPart.Worksheet, "Tarea");
+                InsertCell(2, 5, worksheetPart.Worksheet, "Total");
+                InsertCell(2, 6, worksheetPart.Worksheet, "Porcentaje");
+                createTable(worksheetPart.Worksheet, 3, 4, 3, generalData);
+
+                //TP table (Header and then data)
+                InsertCell(2, 8, worksheetPart.Worksheet, "Tarea");
+                InsertCell(2, 9, worksheetPart.Worksheet, "Total");
+                InsertCell(2, 10, worksheetPart.Worksheet, "Porcentaje");
+                createTable(worksheetPart.Worksheet, 3, 8, 3, tpDataA);
+                //TC table (Header and then data)
+                InsertCell(2, 12, worksheetPart.Worksheet, "Tarea");
+                InsertCell(2, 13, worksheetPart.Worksheet, "Total");
+                InsertCell(2, 14, worksheetPart.Worksheet, "Porcentaje");
+                createTable(worksheetPart.Worksheet, 3, 12, 3, tcDataA);
+                //TI table (Header and then data)
+                InsertCell(2, 16, worksheetPart.Worksheet, "Tarea");
+                InsertCell(2, 17, worksheetPart.Worksheet, "Total");
+                InsertCell(2, 18, worksheetPart.Worksheet, "Porcentaje");
+                createTable(worksheetPart.Worksheet, 3, 16, 3, tiDataA);
+                //Days table (Header and then data)
+                createTable(worksheetPart.Worksheet, 2,20, 6, daysData);
+
+                //General Chart
+                DrawingsPart drawingsPart = worksheetPart.AddNewPart<DrawingsPart>();
+                worksheetPart.Worksheet.Append(new DocumentFormat.OpenXml.Spreadsheet.Drawing() { Id = worksheetPart.GetIdOfPart(drawingsPart) });
+                ExcelCharts.CreatePieChart(drawingsPart, "'Consolidacion del muestreo'!$D$3:$D$5", "'Consolidacion del muestreo'!$E$3:$E$5",8, true, "General");
+                ExcelCharts.CreatePieChart(drawingsPart, "'Consolidacion del muestreo'!$H$3:$H$"+(2+ tpDataA.Count/3).ToString(), "'Consolidacion del muestreo'!$I$3:$I$"+(2 + tpDataA.Count / 3).ToString(), 24, false, "TP");
+                ExcelCharts.CreatePieChart(drawingsPart, "'Consolidacion del muestreo'!$L$3:$L$" + (2 + tcDataA.Count / 3).ToString(), "'Consolidacion del muestreo'!$M$3:$M$" + (2 + tcDataA.Count / 3).ToString(), 40, false, "TC");
+                ExcelCharts.CreatePieChart(drawingsPart, "'Consolidacion del muestreo'!$P$3:$P$" + (2 + tiDataA.Count / 3).ToString(), "'Consolidacion del muestreo'!$Q$3:$Q$" + (2 + tiDataA.Count / 3).ToString(), 56, false, "TI");
+                ExcelCharts.CreateLineChart(drawingsPart, "'Consolidacion del muestreo'!$T$3:$T$" + (2 + (daysData.Count - 6) / 6).ToString(), "'Consolidacion del muestreo'!$U$3:$U$" + (2 + (daysData.Count - 6) / 6).ToString(), 72, false, "Productividad x Dia");
+
+                sheets.Append(sheet);
+                
+                workbookpart.Workbook.Save();
+
+                // Close the document.
+                spreadsheetDocument.Close();
+
+
+            }
+
+
+           // string pathN = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), idMuestreo + "_" + tipoActividad + ".xlsx");
+           // ExcelCharts.CreatePieChart(pathN, 3, "'Consolidacion del muestreo'!$D$3:$D$5", "'Consolidacion del muestreo'!$E$3:$E$5", 8, 2);
+
+
+            ExperimentalFeatures.Enable(ExperimentalFeatures.EmailAttachments);
+
+            SendEmail("MAC - Proyecto ("+nombreProyecto+") - Datos del muestreo ("+nombreMuestreo+")", "Mensaje enviado usando el app móvil de Muestreo de Actividades Constructivas (MAC) \n Nombre del Proyecto: " + nombreProyecto + "\n Nombre del Muestreo: " + nombreMuestreo  + "\n ID muestreo: " + idMuestreo + "\n Tipo Actividad: " + tipoActividad + "\n Descripcion: " + desMuestreo);
+        }
+
 
         public MainPage()
         {
-
-
-
-
-
-
+            
             InitializeComponent();
+            BindingContext = this;
+
             IniData("24");
             CrossDeviceOrientation.Current.LockOrientation(DeviceOrientations.Landscape);
-
-
-
 
             Chart1.Chart = new DonutChart() { Entries = generalChart() };
             Chart2.Chart = new DonutChart() { Entries = tpList,

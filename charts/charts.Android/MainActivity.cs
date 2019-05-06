@@ -7,6 +7,9 @@ using Android.Views;
 using Android.Widget;
 using Android.OS;
 using Plugin.CurrentActivity;
+using Android.Support.V4.Content;
+using Android.Support.V4.App;
+using Android;
 
 namespace charts.Droid
 {
@@ -22,7 +25,9 @@ namespace charts.Droid
 
             base.OnCreate(savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+
             
+
             LoadApplication(new App());
         }
     }
