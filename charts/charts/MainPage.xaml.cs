@@ -80,7 +80,7 @@ namespace charts
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                titulo.Text ="Error de conexión";
             }
 
 
@@ -213,7 +213,7 @@ namespace charts
             string vlTP = Math.Round(((double)totalTP * 100.0 / (double)total), 2).ToString() + "%";
             string vlTC = Math.Round(((double)totalTC * 100.0 / (double)total), 2).ToString() + "%";
             string vlTI = Math.Round(((double)totalTI * 100.0 / (double)total), 2).ToString() + "%";
-            string[] param = { "Tareas productivas (TP)", totalTP.ToString(), vlTP, "Tareas contributivas (TC)", totalTC.ToString(), vlTC, "Tareas improductivas (TP)", totalTI.ToString(), vlTI, "Total", total.ToString(), "100%" };
+            string[] param = { "Tareas productivas (TP)", totalTP.ToString(), vlTP, "Tareas contributivas (TC)", totalTC.ToString(), vlTC, "Tareas improductivas (TI)", totalTI.ToString(), vlTI, "Total", total.ToString(), "100%" };
             generalData = param.OfType<string>().ToList();
            
             createGeneralTableHeader();
@@ -432,21 +432,30 @@ namespace charts
 
 
         async void getPathsxDay(string sampling) {
-            NpgsqlConnection connection = new NpgsqlConnection(ConnectionString);
-            connection.Open();
+
+            try
+            {
+                NpgsqlConnection connection = new NpgsqlConnection(ConnectionString);
+                connection.Open();
 
 
-            NpgsqlCommand command = connection.CreateCommand();
-            command.CommandText = "SELECT fecha, count(*) FROM  (operator_registers o INNER JOIN paths p ON p.id = o.path_id) b INNER JOIN activities a ON b.activity_id = a.id  WHERE sampling_id =  " + sampling +" group by fecha order by fecha asc;";
+                NpgsqlCommand command = connection.CreateCommand();
+                command.CommandText = "SELECT fecha, count(*) FROM  (operator_registers o INNER JOIN paths p ON p.id = o.path_id) b INNER JOIN activities a ON b.activity_id = a.id  WHERE sampling_id =  " + sampling + " group by fecha order by fecha asc;";
 
-            NpgsqlDataReader reader = command.ExecuteReader();
+                NpgsqlDataReader reader = command.ExecuteReader();
 
-            while (reader.Read()) {
-                totalPaths.Add(Int32.Parse(reader[1].ToString()));
+                while (reader.Read())
+                {
+                    totalPaths.Add(Int32.Parse(reader[1].ToString()));
 
+                }
+
+                connection.Close();
             }
-
-            connection.Close();
+            catch(Exception e)
+            {
+                titulo.Text = "Error de conexión";
+            }
 
         }
 
@@ -473,7 +482,7 @@ namespace charts
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                titulo.Text = "Error de conexión";
             }
 
         }
@@ -500,7 +509,7 @@ namespace charts
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                titulo.Text = "Error de conexión";
             }
 
         }
@@ -546,7 +555,7 @@ namespace charts
         }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                titulo.Text = "Error de conexión";
             }
 
 }
@@ -573,7 +582,7 @@ namespace charts
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                titulo.Text = "Error de conexión";
             }
 
         }
@@ -823,7 +832,7 @@ namespace charts
 
             ExperimentalFeatures.Enable(ExperimentalFeatures.EmailAttachments);
 
-            SendEmail("MAC - Proyecto ("+nombreProyecto+") - Datos del muestreo ("+nombreMuestreo+")", "Mensaje enviado usando el app móvil de Muestreo de Actividades Constructivas (MAC) \n Nombre del Proyecto: " + nombreProyecto + "\n Nombre del Muestreo: " + nombreMuestreo  + "\n ID muestreo: " + idMuestreo + "\n Tipo Actividad: " + tipoActividad + "\n Descripcion: " + desMuestreo);
+           SendEmail("MAC - Proyecto ("+nombreProyecto+") - Datos del muestreo ("+nombreMuestreo+")", "Mensaje enviado usando el app móvil de Muestreo de Actividades Constructivas (MAC) \n Nombre del Proyecto: " + nombreProyecto + "\n Nombre del Muestreo: " + nombreMuestreo  + "\n ID muestreo: " + idMuestreo + "\n Tipo Actividad: " + tipoActividad + "\n Descripcion: " + desMuestreo);
         }
 
 

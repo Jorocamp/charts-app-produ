@@ -117,6 +117,3 @@ C:\Users\MICHA\source\repos\charts\charts\charts.Android\obj\Debug\81\android\as
 C:\Users\MICHA\source\repos\charts\charts\charts.Android\obj\Debug\81\android\assets\Xamarin.Forms.Core.pdb
 C:\Users\MICHA\source\repos\charts\charts\charts.Android\obj\Debug\81\android\assets\Xamarin.Forms.Platform.Android.pdb
 C:\Users\MICHA\source\repos\charts\charts\charts.Android\obj\Debug\81\android\assets\Xamarin.Forms.Xaml.pdb
-C:\Users\MICHA\source\repos\charts\charts\charts.Android\obj\Debug\81\linksrc\charts.dll.mdb
-C:\Users\MICHA\source\repos\charts\charts\charts.Android\obj\Debug\81\linksrc\Plugin.DeviceOrientation.dll.mdb
-C:\Users\MICHA\source\repos\charts\charts\charts.Android\obj\Debug\81\linksrc\Xamarin.Essentials.dll.mdb
